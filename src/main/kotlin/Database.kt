@@ -1,6 +1,7 @@
 package dev.heinkel
 
 import io.ktor.server.plugins.di.annotations.Property
+import java.sql.DriverManager
 import kotlinx.serialization.Serializable
 import org.jooq.DSLContext
 import org.jooq.SQLDialect
@@ -8,7 +9,6 @@ import org.jooq.conf.MappedSchema
 import org.jooq.conf.RenderMapping
 import org.jooq.conf.Settings
 import org.jooq.impl.DSL
-import java.sql.DriverManager
 
 @Serializable
 data class DataSource(

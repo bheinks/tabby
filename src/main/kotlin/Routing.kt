@@ -1,6 +1,6 @@
 package dev.heinkel
 
-import dev.heinkel.model.UserRepository
+import dev.heinkel.service.CategoryService
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.Application
 import io.ktor.server.application.install
@@ -13,7 +13,7 @@ import io.ktor.server.routing.get
 import io.ktor.server.routing.routing
 
 fun Application.configureRouting() {
-    val userRepository: UserRepository by dependencies
+    val categoryService: CategoryService by dependencies
 
     install(StatusPages) {
         exception<Throwable> { call, cause ->
@@ -25,9 +25,9 @@ fun Application.configureRouting() {
             call.respondText("Hello World!")
         }
 
-        get("/users") {
+        get("/categories") {
             call.respond(
-                userRepository.getUsers()
+                categoryService.getCategories()
             )
         }
 

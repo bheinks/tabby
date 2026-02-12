@@ -33,11 +33,16 @@ dependencies {
     implementation(libs.ktor.server.config.yaml)
     implementation(libs.ktor.server.di)
     implementation(libs.jooq)
-    implementation(libs.jooq.codegen)
+    implementation(libs.jooq.postgres.extensions)
     implementation(libs.postgresql)
     implementation(libs.flyway.database.postgresql)
     testImplementation(libs.ktor.server.test.host)
     testImplementation(libs.kotlin.test.junit)
+    testImplementation(libs.junit.jupiter.api)
+    testImplementation(libs.testcontainers.junit.jupiter)
+    testImplementation(libs.testcontainers.postgresql)
+    testRuntimeOnly(libs.junit.jupiter.engine)
+    testRuntimeOnly(libs.junit.platform.launcher)
 }
 
 flyway {
@@ -56,6 +61,19 @@ jooq {
         generator {
             generate {
                 isPojos = true
+                isDaos = true
+                pojosIncludes = "tabby.*"
+                daosIncludes = "tabby.*"
+                recordsIncludes = "tabby.*"
+            }
+            database {
+                forcedTypes {
+                    forcedType {
+                        userType = "java.lang.String"
+                        binding = "org.jooq.postgres.extensions.bindings.CitextBinding"
+                        includeTypes = "citext"
+                    }
+                }
             }
         }
     }
@@ -63,3 +81,4 @@ jooq {
 
 tasks.compileKotlin { dependsOn(tasks.jooqCodegen) }
 tasks.jooqCodegen { dependsOn(tasks.flywayMigrate) }
+tasks.test { useJUnitPlatform()}
